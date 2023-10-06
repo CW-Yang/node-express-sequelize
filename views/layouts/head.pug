@@ -1,0 +1,33 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title #{pageTitle}
+    link(rel="stylesheet", href="/css/main.css")
+    block styles
+  body 
+    .backdrop 
+    header.main-header 
+      button#side-menu-toggle Menu 
+      nav.main-header__nav 
+        ul.main-header__item-list 
+          li.main-header__item 
+            a(class=`${path === '/' ? 'active' : ''}`, href="/") Shop
+          li.main-header__item
+            a(class=`${path === '/products' ? 'active' : ''}`, href="/products") Products
+          li.main-header__item 
+            a(class=`${path === '/cart' ? 'active' : ''}`, href="/cart") Cart 
+          li.main-header__item 
+            a(class=`${path === '/orders' ? 'active' : ''}`, href="/orders") Orders
+    nav.mobile-nav 
+      ul.mobile-nav__item-list 
+        li.mobile-nav__item
+          a(class=`${path === '/' ? 'active' : ''}`, href="/") Shop   
+        li.mobile-nav__item
+          a(class=`${path === '/products' ? 'active' : ''}`, href="/products") Products 
+        li.mobile-nav__item
+          a(class=`${path === '/cart' ? 'active' : ''}`, href="/cart") Cart   
+        li.mobile-nav__item
+          a(class=`${path === '/orders' ? 'active' : ''}`, href="/orders") Orders  
+  block content             
