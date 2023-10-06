@@ -16,7 +16,7 @@ main {
 }
 
 form {
-  display: block;
+  display: inline;
 }
 
 .centered {
