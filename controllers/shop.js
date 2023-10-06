@@ -27,3 +27,22 @@ exports.getProducts = (req, res, next) => {
       console.log(err);
     })
 };
+
+exports.getProduct = (req, res, next) => {
+  const id = req.params.productId;
+  Product.findByPk(id)
+    .then(product => {
+      if (product) {
+        res.render('shop/product-detail', {
+          pageTitle: product.title,
+          path: '/products',
+          product
+        });
+      } else {
+        res.redirect('/');
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    }); 
+}
