@@ -6,7 +6,8 @@ exports.getIndex = (req, res, next) => {
       res.render('index', {
         products,
         pageTitle: 'Shop',
-        path: '/'
+        path: '/',
+        isAuthenticated: req.session.isLogin
       });
     })
     .catch(err => {
@@ -20,7 +21,8 @@ exports.getProducts = (req, res, next) => {
       res.render('shop/products', {
         pageTitle: 'Products',
         path: '/products',
-        products
+        products,
+        isAuthenticated: req.session.isLogin
       });
     })
     .catch(err => {
@@ -36,7 +38,8 @@ exports.getProduct = (req, res, next) => {
         res.render('shop/product-detail', {
           pageTitle: product.title,
           path: '/products',
-          product
+          product,
+          isAuthenticated: req.session.isLogin
         });
       } else {
         res.redirect('/');
