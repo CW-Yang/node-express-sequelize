@@ -20,6 +20,7 @@ myStore.sync();
 
 const shopRouter = require('./routes/shop');
 const authRouter = require('./routes/auth');
+const adminRouter = require('./routes/admin');
 
 const errorController = require('./controllers/error');
 
@@ -37,6 +38,7 @@ app.set('views', 'views');
 // setting routers
 app.use(shopRouter);
 app.use(authRouter);
+app.use('/admin', adminRouter);
 
 // error handle
 app.use(errorController.get404);
