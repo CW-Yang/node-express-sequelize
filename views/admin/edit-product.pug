@@ -10,13 +10,13 @@ block content
         input(type="text", name="title", id="title", value=`${isEdit ? product.title : ''}`) 
       .form-control 
         label(for="imageUrl") Image URL 
-        input(type="text", name="imageUrl", id="imageUrl")
+        input(type="text", name="imageUrl", id="imageUrl", value=`${isEdit ? product.imageUrl : ''}`)
       .form-control 
         label(for="price") Price 
-        input(type="double", name="price", id="price")  
+        input(type="number", step="0.01", name="price", id="price", value=`${isEdit ? product.price : ''}`)  
       .form-control 
         label(for="description") Description 
-        input(type="text", name="description", id="description")
+        input(type="text", name="description", id="description", value=`${isEdit ? product.description : ''}`)
       if isEdit 
         input(type="hidden", value=`${product.id}`, name="productId", id="productId")       
       button.btn(type="submit") #{isEdit ? 'Update Product' : 'Add Product'} 
