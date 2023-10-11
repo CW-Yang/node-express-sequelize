@@ -1,4 +1,5 @@
 const Cart = require('../models/cart');
+const CartItem = require('../models/cartItem');
 const Product = require('../models/product');
 const User = require('../models/user');
 
@@ -14,7 +15,7 @@ exports.getIndex = (req, res, next) => {
     })
     .catch(err => {
       console.log(err);
-    })
+    });
 };
 
 exports.getProducts = (req, res, next) => {
@@ -66,12 +67,59 @@ exports.getCart = (req, res, next) => {
       return cart.getProducts();
     })
     .then(items => {
+      const products = items;
       res.render('shop/cart', {
         pageTitle: 'Your Cart',
         path: '/cart',
-        items,
+        items: products,
         isAuthenticated: req.session.isLogin
       });
     })  
     .catch(err => console.log(err));
+};
+
+exports.postAddCartItem = (req, res, next) => {
+  const productId = req.body.productId;
+  const userId = req.session.user.id;
+  let quantity = 1;
+  let userCart;
+  User.findOne({
+    where: {
+      id: userId
+    }
+  })
+    .then(user => {
+      return user.getCart();
+    })
+    .then(cart => {
+      userCart = cart;
+      return cart.getProducts({
+        where: {
+          id: productId
+        }
+      });
+    })
+    .then(items => {
+      let product = items[0];
+      if (product) {
+        // update existing item
+        quantity = product.cartItem.quantity + 1;
+        return product;
+      }
+      return Product.findByPk(productId);
+    })
+    .then(product => {
+      return userCart.addProduct(product, {
+        through: {
+          quantity
+        }
+      });
+    })
+    .then(result => {
+      console.log('ADDED TO CART');
+      return res.redirect('/cart');
+    })
+    .catch(err => {
+      console.log(err);
+    });
 };
