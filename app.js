@@ -35,6 +35,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'pug');
 app.set('views', 'views');
 
+// data associations
+const User = require('./models/user');
+const Cart = require('./models/cart');
+const CartItem = require('./models/cartItem');
+const Product = require('./models/product');
+
+User.hasOne(Cart);
+Cart.belongsTo(User);
+Cart.belongsToMany(Product, { through: CartItem });
+Product.belongsToMany(Cart, { through: CartItem });
+
 // setting routers
 app.use(shopRouter);
 app.use(authRouter);

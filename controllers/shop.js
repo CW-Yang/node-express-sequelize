@@ -1,4 +1,6 @@
+const Cart = require('../models/cart');
 const Product = require('../models/product');
+const User = require('../models/user');
 
 exports.getIndex = (req, res, next) => {
   Product.findAll()
@@ -51,10 +53,25 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-  res.render('shop/cart', {
-    pageTitle: 'Your Cart',
-    items: [],
-    path: '/cart',
-    isAuthenticated: req.session.isLogin
-  });
+  const userId = req.session.user.id;
+  User.findOne({
+    where: {
+      id: userId
+    }
+  })
+    .then(user => {
+      return user.getCart();
+    })
+    .then(cart => {
+      return cart.getProducts();
+    })
+    .then(items => {
+      res.render('shop/cart', {
+        pageTitle: 'Your Cart',
+        path: '/cart',
+        items,
+        isAuthenticated: req.session.isLogin
+      });
+    })  
+    .catch(err => console.log(err));
 };

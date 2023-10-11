@@ -1,3 +1,4 @@
+const Cart = require('../models/cart');
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 
@@ -67,6 +68,9 @@ exports.postSignup = (req, res, next) => {
         email: email,
         password: hashCode
       });
+    })
+    .then(user => {
+      return user.createCart();
     })
     .then(result => {
       return res.redirect('/signin');
