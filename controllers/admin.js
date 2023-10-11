@@ -51,7 +51,6 @@ exports.getEditProduct = (req, res, next) => {
       if (!product) {
         return res.redirect('/admin/products');
       }
-
       res.render('admin/edit-product', {
         product,
         pageTitle: 'Edit Product',
@@ -82,4 +81,17 @@ exports.postEditProduct = (req, res, next) => {
       return res.redirect('/admin/products');
     })
     .catch(err => console.log(err));
+};
+
+exports.postDeleteProduct = (req, res, next) => {
+  const id = req.body.productId;
+  Product.findByPk(id)
+    .then(product => {
+      return product.destroy();
+    })
+    .then(result => {
+      console.log('DELETED PRODUCT');
+      return res.redirect('/admin/products');
+    })
+    .catch(err => console.log(err))
 };
