@@ -123,3 +123,33 @@ exports.postAddCartItem = (req, res, next) => {
       console.log(err);
     });
 };
+
+exports.postDeleteCartItem = (req, res, next) => {
+  const id = req.body.id;
+  const userId = req.session.user.id;
+  User.findOne({
+    where: {
+      id: userId
+    }
+  })
+    .then(user => {
+      return user.getCart();
+    })
+    .then(cart => {
+      return cart.getProducts({
+        where: {
+          id
+        }
+      });
+    })
+    .then(items => {
+      return items[0].cartItem.destroy();
+    })
+    .then(result => {
+      console.log('DELETE CART ITEM');
+      return res.redirect('/cart');
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
