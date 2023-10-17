@@ -52,10 +52,30 @@ Order.belongsTo(User);
 Order.belongsToMany(Product, { through: OrderItem });
 Product.belongsToMany(Order, { through: OrderItem });
 
+// checking authencation
+app.use((req, res, next) => {
+  if (req.session) {
+    User.findByPk(req.session?.user?.id)
+      .then(user => {
+        if (user) {
+          req.user = user;
+        }
+        next();
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  } else {
+    next();
+  }
+});
+
 // setting routers
 app.use(shopRouter);
 app.use(authRouter);
 app.use('/admin', adminRouter);
+
+
 
 // error handle
 app.use(errorController.get404);
