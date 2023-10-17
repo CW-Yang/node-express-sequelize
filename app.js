@@ -70,6 +70,11 @@ app.use((req, res, next) => {
   }
 });
 
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLogin;
+  next();
+});
+
 // setting routers
 app.use(shopRouter);
 app.use(authRouter);
