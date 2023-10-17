@@ -12,4 +12,4 @@ block content
             h1 Order - # #{order.id} 
             ul.orders__products 
               each product in order.products 
-                l1.orders_products_item #{product.title}   
+                li.orders_products_item #{`${product.title}   ${product.orderItem.quantity}`}   

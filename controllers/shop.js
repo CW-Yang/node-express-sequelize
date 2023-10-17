@@ -142,6 +142,21 @@ exports.postDeleteCartItem = (req, res, next) => {
     });
 };
 
+exports.getOrders = (req, res, next) => {
+  req.user.getOrders({ include: ['products'] })
+    .then(orders => {
+      console.log(orders);
+      res.render('shop/order', {
+        pageTitle: 'Your Orders',
+        orders,
+        path: '/orders'
+      });   
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
 exports.postCreateOrder = (req, res, next) => {
   req.user.getCart()
     .then(cart => {
@@ -151,10 +166,6 @@ exports.postCreateOrder = (req, res, next) => {
     .then(products => {
       return req.user.createOrder()
         .then(order => {
-          let amount = 0;
-          products.forEach(product => {
-            amount += +product.price;
-          });
           return order.addProducts(products.map(product => {
             product.orderItem = {
               quantity: product.cartItem.quantity
