@@ -40,11 +40,17 @@ const User = require('./models/user');
 const Cart = require('./models/cart');
 const CartItem = require('./models/cartItem');
 const Product = require('./models/product');
+const Order = require('./models/order');
+const OrderItem = require('./models/orderItem');
 
 User.hasOne(Cart);
 Cart.belongsTo(User);
 Cart.belongsToMany(Product, { through: CartItem });
 Product.belongsToMany(Cart, { through: CartItem });
+User.hasMany(Order);
+Order.belongsTo(User);
+Order.belongsToMany(Product, { through: OrderItem });
+Product.belongsToMany(Order, { through: OrderItem });
 
 // setting routers
 app.use(shopRouter);

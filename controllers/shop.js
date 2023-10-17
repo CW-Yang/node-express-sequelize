@@ -153,3 +153,22 @@ exports.postDeleteCartItem = (req, res, next) => {
       console.log(err);
     });
 };
+
+exports.postCreateOrder = (req, res, next) => {
+  const userId = req.session.user.id;
+  Cart.findOne({
+    where: {
+      userId: userId
+    }
+  })
+    .then(cart => {
+      return cart.getProducts();
+    })
+    .then(items => {
+      console.log(items);
+      next();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
