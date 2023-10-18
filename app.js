@@ -26,6 +26,10 @@ app.use(session({
 const csrfProtection = csrf({ cookie: false });
 app.use(csrfProtection);
 
+// setting flash message
+const flash = require('connect-flash');
+app.use(flash());
+
 
 myStore.sync();
 

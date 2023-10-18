@@ -2,27 +2,37 @@ const Cart = require('../models/cart');
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 
+
 exports.getSignin = (req, res, next) => {
+  let message = req.flash('error');
+
+  if (message.length === 0) {
+    message = null;
+  }
   res.render('auth/sign-in', {
     pageTitle: 'Sign In',
     path: '/signin',
+    message
   });
 };
 
 exports.postSignin = (req, res, next) => {
-   const email = req.body.email;
+  const email = req.body.email;
   const password = req.body.password;
+  
   User.findOne({ where: {
     email: email
   } })
     .then(user => {
       if (!user) {
-        return res.redirect('/signup');
+        req.flash('error', 'Invalid email or password!');
+        return res.redirect('/signin');
       }
       bcrypt.compare(password, user.password)
         .then(doMatch => {
           if (!doMatch) {
-            return res.redirect('/signup');
+            req.flash('error', 'Invalid email or password!');
+            return res.redirect('/signin');
           }
           req.session.isLogin = true;
           req.session.user = user;
