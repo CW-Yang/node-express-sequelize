@@ -1,7 +1,3 @@
-const Cart = require('../models/cart');
-const CartItem = require('../models/cartItem');
-const Order = require('../models/order');
-const OrderItem = require('../models/orderItem');
 const Product = require('../models/product');
 const User = require('../models/user');
 

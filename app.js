@@ -2,8 +2,14 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const sequelize = require('./utils/database');
+
+// setting body-parser
+const parser = require('body-parser');
+app.use(parser.urlencoded({ extended: false }));
+
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
+const csrf = require('csurf');
 
 // setting session
 const myStore = new SequelizeStore({
@@ -16,6 +22,11 @@ app.use(session({
   store: myStore
 }));
 
+// setting csrf protection
+const csrfProtection = csrf({ cookie: false });
+app.use(csrfProtection);
+
+
 myStore.sync();
 
 const shopRouter = require('./routes/shop');
@@ -24,9 +35,7 @@ const adminRouter = require('./routes/admin');
 
 const errorController = require('./controllers/error');
 
-// setting body-parser
-const parser = require('body-parser');
-app.use(parser.urlencoded({ extended: false }));
+
 
 // setting static path 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -72,8 +81,11 @@ app.use((req, res, next) => {
 
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLogin;
+  res.locals.csrfToken = req.csrfToken();
   next();
 });
+
+
 
 // setting routers
 app.use(shopRouter);
@@ -84,6 +96,8 @@ app.use('/admin', adminRouter);
 
 // error handle
 app.use(errorController.get404);
+
+
 
 sequelize.sync()
   .then(result => {

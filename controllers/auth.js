@@ -10,7 +10,7 @@ exports.getSignin = (req, res, next) => {
 };
 
 exports.postSignin = (req, res, next) => {
-  const email = req.body.email;
+   const email = req.body.email;
   const password = req.body.password;
   User.findOne({ where: {
     email: email
