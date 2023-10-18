@@ -50,9 +50,15 @@ exports.postSignin = (req, res, next) => {
 };
 
 exports.getSignup = (req, res, next) => {
+  let message = req.flash('error');
+
+  if (message.length === 0) {
+    message = null;
+  }
   res.render('auth/sign-up', {
     pageTitle: 'Sign Up',
     path: '/signup',
+    message
   });
 };
 
@@ -67,6 +73,7 @@ exports.postSignup = (req, res, next) => {
   })
     .then(user => {
       if (user) {
+        req.flash('error', 'The email has been registered.');
         return res.redirect('/signup');
       }
       return bcrypt.hash(password, 12);
